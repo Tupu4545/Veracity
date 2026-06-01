@@ -154,7 +154,7 @@
             </div>
             <div class="aero-glass rounded-xl p-panel-padding h-[260px] flex flex-col overflow-hidden">
                 <h3 class="font-bold text-xs text-on-surface tracking-widest uppercase mb-1">Source Health</h3>
-                <span id="source-count" class="font-mono-data text-[8px] uppercase text-on-surface-variant mb-6 block tracking-widest">0 Nodes Found</span>
+                <span id="source-count" class="font-mono-data text-[8px] text-on-surface-variant mb-6 block tracking-widest">0 Nodes Found</span>
                 <div id="sentiment-bars" class="space-y-4 mt-6 overflow-y-auto pr-2"></div>
             </div>
             <div class="aero-glass rounded-xl p-panel-padding h-[260px] flex flex-col overflow-hidden">
@@ -261,7 +261,10 @@
         document.getElementById('confidence-score').textContent = `${data.confidence_score}%`;
         const offset = 264 - (264 * data.confidence_score / 100);
         document.getElementById('confidence-circle').style.strokeDashoffset = offset;
-        document.getElementById('bias-text').textContent = data.political_bias.toUpperCase();
+        document.getElementById('confidence-circle').className = data.is_true === "True" ? "text-secondary transition-all duration-1000" : "text-error transition-all duration-1000";
+
+        const bias = data.political_bias || "Neutral";
+        document.getElementById('bias-text').textContent = bias.toUpperCase() === "NONE" ? "NEUTRAL BIAS" : bias.toUpperCase() + " BIAS";
         document.getElementById('explanation-content').textContent = data.explanation;
         const grid = document.getElementById('sources-grid');
         grid.innerHTML = '';
@@ -278,6 +281,7 @@
     }
 
     function saveToHistory(q, v) {
+        if (!q || !v) return; // Prevent saving undefined items
         let h = JSON.parse(localStorage.getItem('veracity_history') || '[]');
         h.unshift({ q, v, d: new Date().toLocaleDateString() });
         localStorage.setItem('veracity_history', JSON.stringify(h.slice(0, 20)));
@@ -289,6 +293,7 @@
         const h = JSON.parse(localStorage.getItem('veracity_history') || '[]');
         l.innerHTML = h.length ? '' : '<p class="text-[9px] font-mono-data uppercase text-center mt-10 opacity-30">NO DATA</p>';
         h.forEach(i => {
+            if (!i.q || !i.v) return; // Skip malformed records
             l.innerHTML += `<div class="p-3 rounded-lg bg-white/5 border border-white/5 hover:border-white/10 transition-all cursor-pointer"><span class="font-mono-data text-[8px] uppercase opacity-50">${i.v}</span><p class="text-[10px] truncate">${i.q}</p></div>`;
         });
     }
