@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>API Registry | Veracity</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&family=Geist:wght@100..900&display=swap" rel="stylesheet"/>
+<style>
+    body { background-color: #020617; color: #dce1fb; font-family: 'Geist', sans-serif; -webkit-font-smoothing: antialiased; }
+    .glass-panel { background: rgba(25, 31, 49, 0.4); backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px); border: 1px solid rgba(255, 255, 255, 0.1); }
+    .font-mono-data { font-family: 'Geist Mono', monospace; }
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: #020617; }
+    ::-webkit-scrollbar-thumb { background: rgba(210, 187, 255, 0.2); border-radius: 10px; }
+</style>
+<script id="tailwind-config">
+    tailwind.config = {
+        darkMode: "class",
+        theme: {
+            extend: {
+                colors: {
+                    "surface-container": "#0c1324",
+                    "background": "#020617",
+                    "tertiary": "#ffb3ad",
+                    "surface-variant": "#0f172a",
+                    "on-surface": "#f1f5f9",
+                    "on-surface-variant": "#94a3b8",
+                    "primary": "#d2bbff",
+                    "primary-container": "#7c3aed",
+                    "secondary": "#4edea3",
+                    "secondary-container": "#00a572",
+                    "error": "#ef4444",
+                    "outline-variant": "rgba(255,255,255,0.1)"
+                }
+            }
+        }
+    }
+</script>
+</head>
+<body class="min-h-screen p-8 md:p-12 selection:bg-primary-container selection:text-white">
+
+<header class="max-w-6xl mx-auto mb-16">
+    <a href="/" class="flex items-center gap-4 mb-4 hover:opacity-80 transition-opacity">
+        <span class="material-symbols-outlined text-primary text-4xl">api</span>
+        <h1 class="font-bold text-4xl text-on-surface tracking-tighter">Veracity</h1>
+    </a>
+    <p class="font-mono-data text-xs text-primary uppercase tracking-[0.2em]">API Key Acquisition Guide</p>
+</header>
+
+<main class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-8">
+    <aside class="md:col-span-3 hidden md:block space-y-4">
+        <div class="glass-panel rounded-xl p-6 sticky top-12">
+            <h2 class="font-mono-data text-[10px] text-primary mb-4 tracking-widest uppercase">Provider List</h2>
+            <ul class="space-y-4 font-mono-data text-[10px] text-on-surface-variant uppercase tracking-widest">
+                <li class="flex justify-between border-b border-white/5 pb-2"><span>NewsAPI</span><span class="text-secondary">REQUIRED</span></li>
+                <li class="flex justify-between border-b border-white/5 pb-2"><span>Groq LPU</span><span class="text-primary">RECOMMENDED</span></li>
+                <li class="flex justify-between border-b border-white/5 pb-2"><span>Google Gemini</span><span class="text-on-surface">ALTERNATIVE</span></li>
+                <li class="flex justify-between border-b border-white/5 pb-2"><span>Custom API</span><span class="text-on-surface">PRIVATE</span></li>
+            </ul>
+        </div>
+    </aside>
+
+    <section class="md:col-span-9 space-y-8">
+        <div class="glass-panel rounded-xl p-8">
+            <div class="flex items-center gap-4 mb-6">
+                <span class="font-mono-data text-secondary bg-secondary/10 px-3 py-1 rounded border border-secondary/20">01</span>
+                <h3 class="font-bold text-2xl text-on-surface tracking-tight">How to get a NewsAPI Key</h3>
+            </div>
+            <div class="text-on-surface-variant space-y-4 text-sm leading-relaxed">
+                <p>Veracity requires NewsAPI to fetch live context. You must provide your own key.</p>
+                <ol class="list-decimal list-inside space-y-2 mt-4 ml-4 font-mono-data text-xs">
+                    <li>Visit <a href="https://newsapi.org/register" target="_blank" class="text-secondary hover:underline">newsapi.org/register</a>.</li>
+                    <li>Create a free developer account.</li>
+                    <li>Copy your API key from the dashboard and paste it into Veracity's settings.</li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="glass-panel rounded-xl p-8">
+            <div class="flex items-center gap-4 mb-6">
+                <span class="font-mono-data text-primary bg-primary/10 px-3 py-1 rounded border border-primary/20">02</span>
+                <h3 class="font-bold text-2xl text-on-surface tracking-tight">How to get a Groq Key (Fastest)</h3>
+            </div>
+            <div class="text-on-surface-variant space-y-4 text-sm leading-relaxed">
+                <p>Groq's LPUs provide the lowest latency for RAG analysis. We highly recommend using Groq.</p>
+                <ol class="list-decimal list-inside space-y-2 mt-4 ml-4 font-mono-data text-xs">
+                    <li>Visit <a href="https://console.groq.com/keys" target="_blank" class="text-primary hover:underline">console.groq.com</a>.</li>
+                    <li>Login with Google or GitHub.</li>
+                    <li>Click "Create API Key", name it "Veracity", and copy the key.</li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="glass-panel rounded-xl p-8">
+            <div class="flex items-center gap-4 mb-6">
+                <span class="font-mono-data text-on-surface bg-white/10 px-3 py-1 rounded border border-white/20">03</span>
+                <h3 class="font-bold text-2xl text-on-surface tracking-tight">How to get a Google Gemini Key</h3>
+            </div>
+            <div class="text-on-surface-variant space-y-4 text-sm leading-relaxed">
+                <p>Gemini provides excellent JSON adherence and long context windows.</p>
+                <ol class="list-decimal list-inside space-y-2 mt-4 ml-4 font-mono-data text-xs">
+                    <li>Visit <a href="https://aistudio.google.com/app/apikey" target="_blank" class="text-on-surface hover:underline">Google AI Studio</a>.</li>
+                    <li>Click "Create API Key" and generate one for a new project.</li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="glass-panel rounded-xl p-8">
+            <div class="flex items-center gap-4 mb-6">
+                <span class="font-mono-data text-on-surface bg-white/10 px-3 py-1 rounded border border-white/20">04</span>
+                <h3 class="font-bold text-2xl text-on-surface tracking-tight">Custom API (Privacy-First)</h3>
+            </div>
+            <div class="text-on-surface-variant space-y-4 text-sm leading-relaxed">
+                <p>For users who want maximum privacy or wish to use open-source local models, Veracity supports any OpenAI-compatible API endpoint.</p>
+                <ol class="list-decimal list-inside space-y-2 mt-4 ml-4 font-mono-data text-xs">
+                    <li>Run a local model using <strong>LM Studio</strong> or <strong>Ollama</strong>, or use a provider like <strong>OpenRouter</strong>.</li>
+                    <li>Select "Custom API" in the Veracity settings.</li>
+                    <li>Enter the Base URL (e.g., <code>http://localhost:1234/v1</code> or <code>https://openrouter.ai/api/v1</code>).</li>
+                    <li>Enter the required API key for your custom endpoint (or any text if your local model doesn't require auth).</li>
+                </ol>
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer class="max-w-6xl mx-auto mt-24 pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-4">
+    <div class="font-mono-data text-[10px] text-on-surface-variant flex gap-6 tracking-widest uppercase">
+        <a class="hover:text-primary transition-colors" href="/privacy">Privacy Policy</a>
+        <a class="hover:text-primary transition-colors" href="/terms">Terms of Service</a>
+        <a class="hover:text-primary transition-colors" href="https://github.com/Tupu4545/Veracity" target="_blank">GitHub</a>
+    </div>
+    <div class="text-[10px] font-mono-data text-on-surface-variant opacity-40 uppercase tracking-widest">
+        Last Updated: May 2026 | Version 3.0
+    </div>
+</footer>
+
+<div class="fixed bottom-4 right-4 text-[9px] font-mono-data text-on-surface-variant/50 pointer-events-none select-none z-50 tracking-widest uppercase">
+    Engineered for Truth | Made by ~Arnish & Priyanshu
+</div>
+
+</body>
+</html>

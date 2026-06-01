@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Privacy Policy | Veracity</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&family=Geist:wght@100..900&display=swap" rel="stylesheet"/>
+<style>
+    body { background-color: #020617; color: #dce1fb; font-family: 'Geist', sans-serif; -webkit-font-smoothing: antialiased; }
+    .glass-panel { background: rgba(25, 31, 49, 0.4); backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px); border: 1px solid rgba(255, 255, 255, 0.1); }
+    .font-mono-data { font-family: 'Geist Mono', monospace; }
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: #020617; }
+    ::-webkit-scrollbar-thumb { background: rgba(210, 187, 255, 0.2); border-radius: 10px; }
+</style>
+<script id="tailwind-config">
+    tailwind.config = {
+        darkMode: "class",
+        theme: {
+            extend: {
+                colors: {
+                    "surface-container": "#0c1324",
+                    "background": "#020617",
+                    "tertiary": "#ffb3ad",
+                    "surface-variant": "#0f172a",
+                    "on-surface": "#f1f5f9",
+                    "on-surface-variant": "#94a3b8",
+                    "primary": "#d2bbff",
+                    "primary-container": "#7c3aed",
+                    "secondary": "#4edea3",
+                    "secondary-container": "#00a572",
+                    "error": "#ef4444",
+                    "outline-variant": "rgba(255,255,255,0.1)"
+                }
+            }
+        }
+    }
+</script>
+</head>
+<body class="min-h-screen p-8 md:p-12 selection:bg-primary-container selection:text-white">
+
+<header class="max-w-6xl mx-auto mb-16">
+    <a href="/" class="flex items-center gap-4 mb-4 hover:opacity-80 transition-opacity">
+        <span class="material-symbols-outlined text-primary text-4xl">shield_lock</span>
+        <h1 class="font-bold text-4xl text-on-surface tracking-tighter">Veracity</h1>
+    </a>
+    <p class="font-mono-data text-xs text-primary uppercase tracking-[0.2em]">Privacy Protocol & Data Governance</p>
+</header>
+
+<main class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-8">
+    <aside class="md:col-span-3 hidden md:block space-y-4">
+        <div class="glass-panel rounded-xl p-6 sticky top-12">
+            <nav class="flex flex-col gap-4">
+                <a class="font-mono-data text-[10px] text-primary hover:text-secondary transition-colors uppercase tracking-widest" href="#introduction">01. Digital Constitution</a>
+                <a class="font-mono-data text-[10px] text-on-surface-variant hover:text-secondary transition-colors uppercase tracking-widest" href="#data-collection">02. Data Collection</a>
+                <a class="font-mono-data text-[10px] text-on-surface-variant hover:text-secondary transition-colors uppercase tracking-widest" href="#retention">03. Purge Cycles</a>
+            </nav>
+        </div>
+    </aside>
+
+    <section class="md:col-span-9 space-y-8">
+        <div class="glass-panel rounded-xl p-8" id="introduction">
+            <div class="flex justify-between items-start mb-6">
+                <h2 class="font-bold text-2xl text-on-surface tracking-tight">Digital Constitution</h2>
+                <span class="font-mono-data text-[10px] text-secondary bg-secondary/10 px-3 py-1 rounded-full uppercase tracking-widest">v. 3.0.0 STABLE</span>
+            </div>
+            <p class="text-on-surface-variant leading-relaxed mb-4 text-sm">
+                Veracity operates on a zero-trust architecture. We believe that your search queries, API keys, and behavioral data belong strictly to you. The entire source code for this project is open-source, allowing you to audit our claims and verify exactly how data is routed and parsed. You can review the code repository at our <a href="https://github.com/Tupu4545/Veracity" target="_blank" class="text-primary hover:text-secondary underline transition-colors">official GitHub page</a>. 
+            </p>
+            <p class="text-on-surface-variant leading-relaxed text-sm">
+                We do not track, sell, or monitor individual user sessions. Your browser serves as the execution environment for storing credentials, maintaining strict segregation between your local machine and our servers.
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div class="glass-panel rounded-xl p-8" id="data-collection">
+                <div class="flex items-center gap-3 mb-4 text-primary">
+                    <span class="material-symbols-outlined">analytics</span>
+                    <h3 class="font-mono-data text-[11px] uppercase tracking-widest">Data Vectoring</h3>
+                </div>
+                <p class="text-on-surface-variant text-sm mb-4">
+                    Any queries you submit are passed directly to your selected API provider (e.g., Groq or Google) using your provided keys. We do not log or intercept the payloads on our backend.
+                </p>
+                <ul class="space-y-3 font-mono-data text-[10px] text-on-surface-variant">
+                    <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-primary"></span> LOCAL STORAGE ONLY</li>
+                    <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-primary"></span> NO SERVER-SIDE TRACKING</li>
+                    <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-primary"></span> NO PII COLLECTION</li>
+                </ul>
+            </div>
+
+            <div class="glass-panel rounded-xl p-8" id="retention">
+                <div class="flex items-center gap-3 mb-4 text-secondary">
+                    <span class="material-symbols-outlined">terminal</span>
+                    <h3 class="font-mono-data text-[11px] uppercase tracking-widest">Purge Cycles</h3>
+                </div>
+                <p class="text-on-surface-variant text-sm mb-4">
+                    Because your data (history, keys, preferences) is stored entirely in your browser's localStorage, you retain absolute control. You may trigger a purge cycle at any time by clearing your browser data or clicking the 'Delete Sweep' icon in the dashboard.
+                </p>
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer class="max-w-6xl mx-auto mt-24 pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-4">
+    <div class="font-mono-data text-[10px] text-on-surface-variant flex gap-6 tracking-widest uppercase">
+        <a class="hover:text-primary transition-colors" href="/terms">Terms of Service</a>
+        <a class="hover:text-primary transition-colors" href="/api-docs">API Documentation</a>
+        <a class="hover:text-primary transition-colors" href="https://github.com/Tupu4545/Veracity" target="_blank">GitHub</a>
+    </div>
+    <div class="text-[10px] font-mono-data text-on-surface-variant opacity-40 uppercase tracking-widest">
+        Last Updated: May 2026 | Version 3.0
+    </div>
+</footer>
+
+<div class="fixed bottom-4 right-4 text-[9px] font-mono-data text-on-surface-variant/50 pointer-events-none select-none z-50 tracking-widest uppercase">
+    Engineered for Truth | Made by ~Arnish & Priyanshu
+</div>
+
+<script>
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            document.querySelector(this.getAttribute('href')).scrollIntoView({
+                behavior: 'smooth'
+            });
+            // Update active state
+            document.querySelectorAll('aside nav a').forEach(a => {
+                a.classList.replace('text-primary', 'text-on-surface-variant');
+            });
+            this.classList.replace('text-on-surface-variant', 'text-primary');
+        });
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,234 @@
+body {
+    font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Arial, sans-serif;
+    background: #0f172a;
+    color: #f8fafc;
+    margin: 0;
+    padding: 24px;
+    box-sizing: border-box;
+}
+
+/* Let the main container expand gracefully to fill up to 95% of a full wide screen */
+.container {
+    width: 95%;
+    max-width: 1600px;
+    background: #1e293b;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+    margin: 0 auto;
+    border: 1px solid #334155;
+    box-sizing: border-box;
+}
+
+h1 {
+    color: #38bdf8;
+    margin-top: 0;
+    font-size: 32px;
+    letter-spacing: -0.5px;
+}
+
+p.subtitle {
+    color: #94a3b8;
+    font-size: 15px;
+    margin-bottom: 24px;
+}
+
+.input-section {
+    margin-bottom: 24px;
+}
+
+textarea {
+    width: 100%;
+    height: 120px;
+    padding: 16px;
+    background: #0f172a;
+    border: 1px solid #475569;
+    border-radius: 8px;
+    color: #f8fafc;
+    font-size: 16px;
+    box-sizing: border-box;
+    resize: vertical;
+    transition: border-color 0.2s;
+}
+
+textarea:focus {
+    outline: none;
+    border-color: #38bdf8;
+    box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.2);
+}
+
+button {
+    background: #38bdf8;
+    color: #0f172a;
+    border: none;
+    padding: 14px 24px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 14px;
+    width: 100%;
+    font-weight: bold;
+    transition: background 0.2s, transform 0.1s;
+}
+
+button:hover {
+    background: #7dd3fc;
+}
+
+button:active {
+    transform: scale(0.995);
+}
+
+button:disabled {
+    background: #475569;
+    color: #94a3b8;
+    cursor: not-allowed;
+}
+
+/* Dashboard Panel Grid layout */
+.result-box {
+    margin-top: 30px;
+    display: none; /* Controlled dynamically via JavaScript */
+    border-top: 2px solid #334155;
+    padding-top: 30px;
+}
+
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr; /* Left side takes 40%, Right side takes 60% */
+    gap: 32px;
+}
+
+/* Responsive collapse for smaller screens */
+@media (max-width: 1024px) {
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.panel-left {
+    background: #0f172a;
+    padding: 24px;
+    border-radius: 10px;
+    border: 1px solid #334155;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.panel-right {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.badge-row {
+    width: 100%;
+    display: flex;
+    gap: 12px;
+    margin-bottom: 20px;
+    justify-content: center;
+}
+
+.badge {
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 14px;
+    letter-spacing: 0.5px;
+}
+
+.true { background: #22c55e; color: #052e16; }
+.false { background: #ef4444; color: #450a0a; }
+.misleading { background: #eab308; color: #422006; }
+
+.meta-card {
+    background: #1e293b;
+    border: 1px solid #334155;
+    border-radius: 8px;
+    padding: 16px;
+    width: 100%;
+    box-sizing: border-box;
+    margin-bottom: 16px;
+}
+
+.meta-line {
+    margin-bottom: 8px;
+    font-size: 15px;
+    color: #e2e8f0;
+}
+
+.meta-line:last-child {
+    margin-bottom: 0;
+}
+
+.meta-line strong {
+    color: #94a3b8;
+}
+
+/* Visualization Block constraints */
+.chart-container {
+    position: relative;
+    margin-top: 10px;
+    height: 280px;
+    width: 100%;
+    max-width: 320px;
+}
+
+h3 {
+    color: #38bdf8;
+    font-size: 20px;
+    margin: 0 0 12px 0;
+}
+
+p#explanationText {
+    line-height: 1.7;
+    color: #e2e8f0;
+    background: #0f172a;
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px solid #334155;
+    margin: 0;
+    font-size: 15px;
+}
+
+.sources-container {
+    background: #0f172a;
+    padding: 24px;
+    border-radius: 8px;
+    border: 1px solid #334155;
+}
+
+ul {
+    padding-left: 20px;
+    margin: 0;
+}
+
+li {
+    margin-bottom: 16px;
+    color: #cbd5e1;
+    font-size: 14.5px;
+    line-height: 1.5;
+}
+
+li:last-child {
+    margin-bottom: 0;
+}
+
+li strong {
+    color: #f8fafc;
+}
+
+a {
+    color: #38bdf8;
+    text-decoration: none;
+    font-weight: 500;
+    display: inline-block;
+    margin-top: 4px;
+}
+
+a:hover {
+    text-decoration: underline;
+    color: #7dd3fc;
+}

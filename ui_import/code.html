@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Veracity - Truth Engine</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&amp;family=Geist+Mono:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .liquid-glass {
+            backdrop-filter: blur(20px);
+            background-color: rgba(46, 52, 71, 0.4); /* surface-variant */
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .outer-glow:hover {
+            box-shadow: 0 0 15px rgba(124, 58, 237, 0.2); /* Electric Violet / primary-container */
+            transform: translateY(-4px);
+            transition: all 0.3s ease;
+        }
+        .squishy:active {
+            transform: scale(0.98);
+        }
+        .pulse-glow {
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(0, 165, 114, 0.4); } /* secondary-container */
+            70% { box-shadow: 0 0 0 10px rgba(0, 165, 114, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(0, 165, 114, 0); }
+        }
+        .chart-line {
+            stroke-dasharray: 1000;
+            stroke-dashoffset: 1000;
+            animation: dash 2s linear forwards;
+        }
+        @keyframes dash {
+            to { stroke-dashoffset: 0; }
+        }
+    </style>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-surface-variant": "#ccc3d8",
+                    "surface-container-highest": "#2e3447",
+                    "surface-container-high": "#23293c",
+                    "on-primary-fixed": "#25005a",
+                    "on-tertiary-fixed": "#410004",
+                    "secondary-container": "#00a572",
+                    "error": "#ffb4ab",
+                    "on-secondary": "#003824",
+                    "primary-container": "#7c3aed",
+                    "error-container": "#93000a",
+                    "secondary-fixed-dim": "#4edea3",
+                    "tertiary-fixed": "#ffdad7",
+                    "background": "#0c1324",
+                    "inverse-surface": "#dce1fb",
+                    "surface-variant": "#2e3447",
+                    "on-primary-fixed-variant": "#5a00c6",
+                    "primary-fixed-dim": "#d2bbff",
+                    "primary-fixed": "#eaddff",
+                    "on-error-container": "#ffdad6",
+                    "on-secondary-container": "#00311f",
+                    "tertiary-fixed-dim": "#ffb3ad",
+                    "surface-dim": "#0c1324",
+                    "tertiary-container": "#c6252b",
+                    "surface": "#0c1324",
+                    "surface-container": "#191f31",
+                    "surface-tint": "#d2bbff",
+                    "on-secondary-fixed-variant": "#005236",
+                    "on-error": "#690005",
+                    "on-primary-container": "#ede0ff",
+                    "surface-container-lowest": "#070d1f",
+                    "on-primary": "#3f008e",
+                    "surface-bright": "#33394c",
+                    "on-tertiary-container": "#ffdfdc",
+                    "secondary-fixed": "#6ffbbe",
+                    "on-tertiary-fixed-variant": "#930013",
+                    "inverse-on-surface": "#2a3043",
+                    "inverse-primary": "#732ee4",
+                    "on-secondary-fixed": "#002113",
+                    "on-surface": "#dce1fb",
+                    "tertiary": "#ffb3ad",
+                    "on-tertiary": "#68000a",
+                    "outline": "#958da1",
+                    "on-background": "#dce1fb",
+                    "primary": "#d2bbff",
+                    "surface-container-low": "#151b2d",
+                    "secondary": "#4edea3",
+                    "outline-variant": "#4a4455"
+            },
+            "borderRadius": {
+                    "DEFAULT": "1rem",
+                    "lg": "2rem",
+                    "xl": "3rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "panel-padding": "32px",
+                    "margin-mobile": "16px",
+                    "base": "4px",
+                    "container-gap": "24px",
+                    "margin-desktop": "40px"
+            },
+            "fontFamily": {
+                    "body-md": ["Geist"],
+                    "headline-lg-mobile": ["Geist"],
+                    "label-mono": ["Geist Mono"],
+                    "headline-lg": ["Geist"],
+                    "display-lg": ["Geist"]
+            },
+            "fontSize": {
+                    "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "headline-lg-mobile": ["24px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                    "label-mono": ["12px", {"lineHeight": "1.0", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                    "headline-lg": ["32px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                    "display-lg": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.04em", "fontWeight": "700"}]
+            }
+          }
+        }
+      }
+    </script>
+</head>
+<body class="bg-background text-on-surface font-body-md overflow-x-hidden selection:bg-primary-container selection:text-on-primary-container">
+<!-- SideNavBar -->
+<nav class="hidden md:flex w-[72px] h-screen fixed left-0 top-0 bg-background/80 backdrop-blur-xl border-r border-white/10 shadow-none flex-col items-center py-panel-padding gap-container-gap z-50">
+<div class="mb-8">
+<div class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center text-on-primary-container font-headline-lg font-bold">
+                V
+            </div>
+</div>
+<a class="scale-95 active:scale-90 transition-transform group flex flex-col items-center gap-1 hover:opacity-100 hover:text-secondary transition-all text-secondary opacity-100" href="#" title="History">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">history</span>
+</a>
+<a class="scale-95 active:scale-90 transition-transform group flex flex-col items-center gap-1 hover:opacity-100 hover:text-secondary transition-all text-on-surface-variant opacity-50" href="#" title="Trending">
+<span class="material-symbols-outlined">trending_up</span>
+</a>
+<a class="scale-95 active:scale-90 transition-transform group flex flex-col items-center gap-1 hover:opacity-100 hover:text-secondary transition-all text-on-surface-variant opacity-50" href="#" title="Settings">
+<span class="material-symbols-outlined">settings</span>
+</a>
+</nav>
+<!-- TopNavBar -->
+<header class="fixed top-0 right-0 left-0 md:left-[72px] h-20 bg-transparent backdrop-blur-md bg-background/40 shadow-none flex items-center justify-between px-margin-mobile md:px-margin-desktop w-full z-40 transition-colors duration-300 ease-in-out hover:bg-surface-container-highest/50">
+<div class="flex items-center gap-4 w-full max-w-2xl">
+<h1 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg font-bold text-on-surface hidden md:block mr-4 tracking-tighter">Veracity</h1>
+<div class="relative w-full group">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant group-focus-within:text-primary transition-colors">search</span>
+<input class="w-full bg-surface-container-high/50 border border-white/10 rounded-full py-3 pl-12 pr-4 text-on-surface placeholder:text-on-surface-variant focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all backdrop-blur-md font-body-md text-body-md" placeholder="Cross-Examine a Rumor..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-4 ml-4">
+<button class="text-on-surface-variant hover:text-primary transition-colors squishy">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="text-on-surface-variant hover:text-primary transition-colors squishy">
+<span class="material-symbols-outlined">account_circle</span>
+</button>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="pt-28 pb-24 md:pl-[72px] px-margin-mobile md:px-margin-desktop min-h-screen">
+<div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-container-gap">
+<!-- Bento Module: Verdict Tile (Spans 8 cols) -->
+<div class="md:col-span-8 liquid-glass rounded-[28px] p-panel-padding outer-glow relative overflow-hidden">
+<div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-secondary-container to-transparent"></div>
+<div class="flex justify-between items-start mb-6">
+<div>
+<h2 class="font-headline-lg text-headline-lg font-bold text-on-surface">Verdict Analysis</h2>
+<span class="font-label-mono text-label-mono uppercase text-on-surface-variant mt-1 block">Query: "Tech CEO steps down amid scandal"</span>
+</div>
+<div class="px-4 py-1.5 rounded-full border border-secondary text-secondary bg-secondary/10 font-label-mono text-label-mono uppercase pulse-glow flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+                        Mostly True
+                    </div>
+</div>
+<div class="flex flex-col md:flex-row items-center gap-8 mt-8">
+<!-- Gauge Placeholder -->
+<div class="w-48 h-48 rounded-full border-[12px] border-surface-container-high relative flex items-center justify-center">
+<svg class="absolute inset-0 w-full h-full transform -rotate-90" viewbox="0 0 100 100">
+<circle class="text-secondary opacity-20" cx="50" cy="50" fill="none" r="44" stroke="currentColor" stroke-width="12"></circle>
+<circle class="text-secondary" cx="50" cy="50" fill="none" r="44" stroke="currentColor" stroke-dasharray="276" stroke-dashoffset="69" stroke-linecap="round" stroke-width="12"></circle>
+</svg>
+<div class="text-center">
+<span class="font-display-lg text-display-lg font-bold text-secondary">75%</span>
+<span class="block font-label-mono text-label-mono text-on-surface-variant uppercase">Confidence</span>
+</div>
+</div>
+<div class="flex-1 space-y-4">
+<div class="bg-surface-container-low/50 rounded-xl p-4 border border-white/5">
+<div class="flex justify-between mb-1">
+<span class="font-label-mono text-label-mono text-on-surface-variant">Data Consistency</span>
+<span class="font-label-mono text-label-mono text-secondary">High</span>
+</div>
+<div class="h-1.5 bg-surface-container-high rounded-full overflow-hidden">
+<div class="h-full bg-secondary w-4/5"></div>
+</div>
+</div>
+<div class="bg-surface-container-low/50 rounded-xl p-4 border border-white/5">
+<div class="flex justify-between mb-1">
+<span class="font-label-mono text-label-mono text-on-surface-variant">Source Reliability</span>
+<span class="font-label-mono text-label-mono text-primary">Moderate</span>
+</div>
+<div class="h-1.5 bg-surface-container-high rounded-full overflow-hidden">
+<div class="h-full bg-primary w-3/5"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Bento Module: Sentiment Over Time (Spans 4 cols) -->
+<div class="md:col-span-4 liquid-glass rounded-[28px] p-panel-padding outer-glow flex flex-col">
+<h3 class="font-headline-lg-mobile text-headline-lg-mobile font-bold text-on-surface mb-1">Sentiment Curve</h3>
+<span class="font-label-mono text-label-mono uppercase text-on-surface-variant mb-6 block">48 Hour Trajectory</span>
+<div class="flex-1 w-full relative min-h-[200px] flex items-end">
+<!-- Simple SVG Line Graph Placeholder -->
+<svg class="w-full h-full absolute inset-0" preserveaspectratio="none" viewbox="0 0 100 100">
+<path class="chart-line" d="M0,80 Q20,70 40,50 T80,30 T100,10" fill="none" stroke="#7c3aed" stroke-width="3"></path>
+<path d="M0,80 Q20,70 40,50 T80,30 T100,10 L100,100 L0,100 Z" fill="url(#grad)" opacity="0.2"></path>
+<defs>
+<lineargradient id="grad" x1="0" x2="0" y1="0" y2="1">
+<stop offset="0%" stop-color="#7c3aed"></stop>
+<stop offset="100%" stop-color="#020617" stop-opacity="0"></stop>
+</lineargradient>
+</defs>
+</svg>
+<!-- Axes labels -->
+<div class="absolute bottom-0 left-0 w-full flex justify-between text-[10px] text-on-surface-variant uppercase font-label-mono border-t border-white/10 pt-1">
+<span>-48h</span>
+<span>Now</span>
+</div>
+</div>
+</div>
+<!-- Bento Module: The AI Autopsy (Spans 6 cols) -->
+<div class="md:col-span-6 liquid-glass rounded-[28px] p-panel-padding outer-glow">
+<div class="flex items-center gap-3 mb-6">
+<span class="material-symbols-outlined text-primary text-3xl">psychology</span>
+<h3 class="font-headline-lg-mobile text-headline-lg-mobile font-bold text-on-surface">The AI Autopsy</h3>
+</div>
+<div class="space-y-4 font-body-md text-body-md text-on-surface-variant leading-relaxed">
+<p>Analysis of recent communications indicates a structural shift in executive leadership. The linguistic patterns across official press releases and internal memos show a <strong class="text-on-surface">92% correlation</strong> with historical resignation events.</p>
+<ul class="space-y-3 mt-4">
+<li class="flex items-start gap-2">
+<span class="material-symbols-outlined text-secondary text-sm mt-1">check_circle</span>
+<span>Multiple tier-1 financial outlets have corroborated the board meeting timing.</span>
+</li>
+<li class="flex items-start gap-2">
+<span class="material-symbols-outlined text-error text-sm mt-1">cancel</span>
+<span>Claims of embezzlement lack verifiable origin and map to known bot networks.</span>
+</li>
+<li class="flex items-start gap-2">
+<span class="material-symbols-outlined text-primary text-sm mt-1">info</span>
+<span>Sentiment shift detected immediately following Q3 earnings call transcript release.</span>
+</li>
+</ul>
+</div>
+</div>
+<!-- Bento Module: Source Triage (Spans 6 cols) -->
+<div class="md:col-span-6 liquid-glass rounded-[28px] p-panel-padding outer-glow">
+<div class="flex justify-between items-center mb-6">
+<h3 class="font-headline-lg-mobile text-headline-lg-mobile font-bold text-on-surface">Source Triage</h3>
+<span class="font-label-mono text-label-mono uppercase text-on-surface-variant">12 Nodes Analyzed</span>
+</div>
+<div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+<!-- Supporting Source -->
+<div class="bg-surface-container/40 border border-secondary/30 rounded-xl p-3 flex flex-col gap-2 hover:bg-surface-container transition-colors squishy">
+<div class="flex justify-between items-center">
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+<span class="text-[10px] uppercase font-label-mono text-on-surface-variant">Center</span>
+</div>
+<span class="font-body-md text-sm text-on-surface truncate">Financial Times</span>
+</div>
+<!-- Refuting Source -->
+<div class="bg-surface-container/40 border border-error/30 rounded-xl p-3 flex flex-col gap-2 hover:bg-surface-container transition-colors squishy">
+<div class="flex justify-between items-center">
+<span class="w-2 h-2 rounded-full bg-error"></span>
+<span class="text-[10px] uppercase font-label-mono text-on-surface-variant">Right</span>
+</div>
+<span class="font-body-md text-sm text-on-surface truncate">Daily Ledger</span>
+</div>
+<!-- Neutral/Supporting -->
+<div class="bg-surface-container/40 border border-secondary/30 rounded-xl p-3 flex flex-col gap-2 hover:bg-surface-container transition-colors squishy">
+<div class="flex justify-between items-center">
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+<span class="text-[10px] uppercase font-label-mono text-on-surface-variant">Left</span>
+</div>
+<span class="font-body-md text-sm text-on-surface truncate">Tech Monitor</span>
+</div>
+<!-- Refuting Source -->
+<div class="bg-surface-container/40 border border-error/30 rounded-xl p-3 flex flex-col gap-2 hover:bg-surface-container transition-colors squishy">
+<div class="flex justify-between items-center">
+<span class="w-2 h-2 rounded-full bg-error"></span>
+<span class="text-[10px] uppercase font-label-mono text-on-surface-variant">Far-Right</span>
+</div>
+<span class="font-body-md text-sm text-on-surface truncate">Patriot News</span>
+</div>
+<!-- Neutral Source -->
+<div class="bg-surface-container/40 border border-white/10 rounded-xl p-3 flex flex-col gap-2 hover:bg-surface-container transition-colors squishy">
+<div class="flex justify-between items-center">
+<span class="w-2 h-2 rounded-full bg-on-surface-variant"></span>
+<span class="text-[10px] uppercase font-label-mono text-on-surface-variant">Center</span>
+</div>
+<span class="font-body-md text-sm text-on-surface truncate">AP Wire</span>
+</div>
+<!-- Supporting Source -->
+<div class="bg-surface-container/40 border border-secondary/30 rounded-xl p-3 flex flex-col gap-2 hover:bg-surface-container transition-colors squishy">
+<div class="flex justify-between items-center">
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+<span class="text-[10px] uppercase font-label-mono text-on-surface-variant">Center-Left</span>
+</div>
+<span class="font-body-md text-sm text-on-surface truncate">Global News</span>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="bg-surface-container-lowest w-full py-base border-t border-outline-variant/20 flex justify-between items-center px-margin-mobile md:px-margin-desktop md:ml-[72px] transition-opacity duration-200 fixed bottom-0 z-40">
+<div class="flex gap-4 font-label-mono text-label-mono">
+<a class="text-on-surface-variant hover:text-secondary transition-colors" href="#">Privacy</a>
+<a class="text-on-surface-variant hover:text-secondary transition-colors" href="#">Terms</a>
+<a class="text-on-surface-variant hover:text-secondary transition-colors" href="#">API</a>
+</div>
+<div class="font-label-mono text-label-mono text-primary">
+            Engineered for Truth | Made by ~Arnish &amp; Priyanshu
+        </div>
+</footer>
+</body></html>

@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Veracity - Universal Truth Engine</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com" rel="preconnect"/>
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+    <link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&family=Geist+Mono:wght@100..900&display=swap" rel="stylesheet"/>
+    <style>
+        :root { --obsidian: #020617; --border-subtle: rgba(255, 255, 255, 0.1); }
+        body { background-color: var(--obsidian); font-family: 'Geist', sans-serif; margin: 0; padding: 0; }
+        .aero-glass { backdrop-filter: blur(30px); background-color: rgba(12, 19, 36, 0.4); border: 1px solid var(--border-subtle); }
+        .font-mono-data { font-family: 'Geist Mono', monospace; }
+        .status-pip-emerald { box-shadow: 0 0 8px #10b981; }
+        .status-pip-crimson { box-shadow: 0 0 8px #ef4444; }
+        .liquid-flow { stroke-dasharray: 1000; stroke-dashoffset: 1000; animation: liquid-draw 3s cubic-bezier(0.45, 0.05, 0.55, 0.95) forwards; }
+        @keyframes liquid-draw { to { stroke-dashoffset: 0; } }
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
+        .fade-in { animation: fadeIn 0.5s ease-out forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .reveal-up { opacity: 0; transform: translateY(30px); animation: revealUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        @keyframes revealUp { to { opacity: 1; transform: translateY(0); } }
+        .stagger-1 { animation-delay: 0.1s; }
+        .stagger-2 { animation-delay: 0.2s; }
+        .stagger-3 { animation-delay: 0.3s; }
+        .pulse-text { animation: pulseText 1.5s ease-in-out infinite; }
+        @keyframes pulseText { 0%, 100% { opacity: 0.4; } 50% { opacity: 1; } }
+        #loading-overlay { display: none; }
+        #loading-overlay.active { display: flex; }
+    </style>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "surface-container": "#0c1324",
+                        "background": "#020617",
+                        "tertiary": "#ffb3ad",
+                        "surface-variant": "#0f172a",
+                        "on-surface": "#f1f5f9",
+                        "on-surface-variant": "#94a3b8",
+                        "primary": "#d2bbff",
+                        "primary-container": "#7c3aed",
+                        "secondary": "#4edea3",
+                        "secondary-container": "#00a572",
+                        "error": "#ef4444",
+                        "outline-variant": "rgba(255,255,255,0.1)"
+                    },
+                    borderRadius: { "DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem" },
+                    spacing: { "panel-padding": "24px", "edge": "48px" }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="text-on-surface overflow-hidden selection:bg-primary-container selection:text-on-primary-container">
+
+<!-- Loading Overlay -->
+<div id="loading-overlay" class="fixed inset-0 z-[200] bg-background/80 backdrop-blur-md flex flex-col items-center justify-center p-6">
+    <div class="w-64 h-1 bg-white/10 rounded-full overflow-hidden mb-6 relative">
+        <div class="h-full bg-primary w-1/2 absolute left-[-50%] animate-[slide_1.5s_infinite_linear]"></div>
+    </div>
+    <p class="font-mono-data text-[10px] uppercase tracking-[0.3em] text-primary pulse-text">Querying Multi-Provider Pipeline...</p>
+</div>
+
+<style> @keyframes slide { from { left: -50%; } to { left: 100%; } } </style>
+
+<!-- Settings Overlay -->
+<div id="settings-overlay" class="fixed inset-0 bg-background/90 backdrop-blur-2xl z-[100] flex items-center justify-center p-6 hidden">
+    <div class="max-w-lg w-full aero-glass rounded-xl p-8 border border-primary/20">
+        <h2 class="font-bold text-2xl tracking-tighter mb-2">Engine Configuration</h2>
+        <p class="text-on-surface-variant text-[10px] mb-8 font-mono-data uppercase tracking-widest">Select AI Provider & Credentials</p>
+        <div class="space-y-6">
+            <div class="grid grid-cols-3 gap-3">
+                <button onclick="setProvider('groq')" id="btn-groq" class="py-2 border border-white/10 rounded-lg text-[10px] font-mono-data uppercase tracking-wider hover:bg-white/5 transition-all bg-primary/20 border-primary/30">Groq LPU</button>
+                <button onclick="setProvider('gemini')" id="btn-gemini" class="py-2 border border-white/10 rounded-lg text-[10px] font-mono-data uppercase tracking-wider hover:bg-white/5 transition-all">Google Gemini</button>
+                <button onclick="setProvider('custom')" id="btn-custom" class="py-2 border border-white/10 rounded-lg text-[10px] font-mono-data uppercase tracking-wider hover:bg-white/5 transition-all">Custom API</button>
+            </div>
+            <div id="api-key-container">
+                <label id="key-label" class="block text-[9px] font-mono-data uppercase text-on-surface-variant mb-2 tracking-widest">Groq API Key</label>
+                <input id="api-key-input" type="password" class="w-full bg-white/5 border border-white/10 rounded-lg py-3 px-4 text-primary focus:outline-none focus:border-primary/50 text-xs font-mono-data" placeholder="Enter key...">
+            </div>
+            <div id="base-url-container" class="hidden">
+                <label class="block text-[9px] font-mono-data uppercase text-on-surface-variant mb-2 tracking-widest">Base URL (OpenAI Compatible)</label>
+                <input id="base-url-input" type="text" class="w-full bg-white/5 border border-white/10 rounded-lg py-3 px-4 text-secondary focus:outline-none focus:border-secondary/50 text-xs font-mono-data" placeholder="https://api.openai.com/v1">
+            </div>
+            <div>
+                <label class="block text-[9px] font-mono-data uppercase text-on-surface-variant mb-2 tracking-widest">NewsAPI Key (Required)</label>
+                <input id="news-key-input" type="password" class="w-full bg-white/5 border border-white/10 rounded-lg py-3 px-4 text-on-surface focus:outline-none focus:border-white/20 text-xs font-mono-data" placeholder="12fc...">
+            </div>
+            <button onclick="saveSettings()" class="w-full bg-primary-container text-white py-4 rounded-lg font-bold hover:bg-primary transition-all text-sm uppercase tracking-widest">Initialize Pipeline</button>
+            <button onclick="setDemoMode()" class="w-full bg-white/5 text-on-surface-variant border border-white/10 py-3 rounded-lg font-bold hover:bg-white/10 transition-all text-xs uppercase tracking-widest mt-3">Try Demo Mode (No Keys)</button>
+        </div>
+    </div>
+</div>
+
+
+<!-- SideNavBar -->
+<nav class="hidden md:flex w-[72px] h-screen fixed left-0 top-0 aero-glass z-50 flex-col items-center py-8 gap-6 border-r border-white/10">
+    <a class="w-12 h-12 flex items-center justify-center rounded-lg transition-all text-secondary bg-secondary/10" href="/" title="Home"><span class="material-symbols-outlined">home</span></a>
+    <a onclick="showSettings()" class="w-12 h-12 flex items-center justify-center rounded-lg transition-all text-on-surface-variant hover:text-primary hover:bg-white/5 cursor-pointer mt-auto" title="Settings"><span class="material-symbols-outlined">settings</span></a>
+</nav>
+
+<div class="ml-[72px] h-screen relative flex flex-col p-edge overflow-hidden">
+    <!-- Top Bar -->
+    <header class="flex items-center justify-between mb-8 reveal-up">
+        <div class="flex items-center gap-12 w-full max-w-4xl">
+            <a href="/" class="hover:opacity-80 transition-opacity"><h1 class="font-bold text-2xl tracking-tighter text-on-surface">Veracity</h1></a>
+            <div class="relative flex-1 group">
+                <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant group-focus-within:text-primary transition-colors text-sm">search</span>
+                <input id="claim-input" class="w-full bg-white/5 border border-white/10 rounded-full py-2.5 pl-12 pr-4 text-on-surface placeholder:text-on-surface-variant focus:outline-none focus:border-primary/50 transition-all font-mono-data text-xs" placeholder="Enter rumor for triage..." type="text" onkeypress="handleKeyPress(event)"/>
+            </div>
+            <button onclick="analyze()" class="bg-primary-container/20 text-primary border border-primary/30 px-6 py-2 rounded-full font-bold hover:bg-primary-container hover:text-white transition-all text-xs uppercase tracking-widest shrink-0">Cross-Examine</button>
+        </div>
+    </header>
+
+    <div id="welcome-state" class="flex-1 flex flex-col items-center justify-center text-center reveal-up stagger-1">
+        <div class="p-6 rounded-full bg-primary/5 border border-primary/10 mb-8 pulse-glow"><span class="material-symbols-outlined text-primary text-6xl">security</span></div>
+        <h2 class="text-5xl font-bold tracking-tighter mb-4 bg-gradient-to-br from-white to-on-surface-variant bg-clip-text text-transparent">Multi-Provider Triage.</h2>
+        <p class="text-on-surface-variant font-mono-data text-sm tracking-widest uppercase max-w-xl leading-relaxed opacity-60">Leverage Groq, Gemini, or Custom API backends to verify reality in real-time.</p>
+    </div>
+
+    <div id="results-container" class="grid grid-cols-12 gap-6 flex-1 overflow-hidden hidden">
+        <aside class="col-span-3 aero-glass rounded-xl p-6 flex flex-col overflow-hidden reveal-up stagger-1">
+            <div class="flex items-center justify-between mb-6">
+                <h3 class="font-bold text-xs tracking-widest uppercase text-on-surface">Local History</h3>
+                <button onclick="clearHistory()" class="material-symbols-outlined text-on-surface-variant text-sm hover:text-error transition-colors">delete_sweep</button>
+            </div>
+            <div id="history-list" class="space-y-3 overflow-y-auto pr-2"></div>
+        </aside>
+
+        <main class="col-span-9 grid grid-cols-2 gap-6 content-start overflow-y-auto pr-2 reveal-up stagger-2 pb-32">
+            <div class="col-span-2 aero-glass rounded-xl p-panel-padding relative">
+                <div class="flex justify-between items-start mb-6">
+                    <div><h2 class="text-xl font-bold tracking-tighter text-on-surface">Verdict Analysis</h2><span id="display-query-id" class="font-mono-data text-[9px] uppercase text-on-surface-variant mt-1 block tracking-widest"></span></div>
+                    <div id="verdict-badge" class="px-3 py-1 rounded-full border border-secondary/30 text-secondary bg-secondary/5 font-mono-data text-[9px] tracking-wider flex items-center gap-2"><span id="verdict-text">Verified</span></div>
+                </div>
+                <div class="flex items-center gap-12">
+                    <div class="relative w-32 h-32 flex items-center justify-center">
+                        <svg class="absolute inset-0 w-full h-full transform -rotate-90" viewBox="0 0 100 100">
+                            <circle class="text-white/5" cx="50" cy="50" fill="none" r="42" stroke="currentColor" stroke-width="8"></circle>
+                            <circle id="confidence-circle" class="text-secondary transition-all duration-1000" cx="50" cy="50" fill="none" r="42" stroke="currentColor" stroke-dasharray="264" stroke-dashoffset="264" stroke-linecap="round" stroke-width="8"></circle>
+                        </svg>
+                        <div class="text-center"><span id="confidence-score" class="text-2xl font-bold text-on-surface tracking-tighter">0%</span></div>
+                    </div>
+                    <div class="flex-1"><span id="bias-text" class="font-mono-data text-[9px] text-primary uppercase">NEUTRAL BIAS</span></div>
+                </div>
+            </div>
+            <div class="aero-glass rounded-xl p-panel-padding h-[260px] flex flex-col overflow-hidden">
+                <h3 class="font-bold text-xs text-on-surface tracking-widest uppercase mb-1">Source Health</h3>
+                <span id="source-count" class="font-mono-data text-[8px] uppercase text-on-surface-variant mb-6 block tracking-widest">0 Nodes Found</span>
+                <div id="sentiment-bars" class="space-y-4 mt-6 overflow-y-auto pr-2"></div>
+            </div>
+            <div class="aero-glass rounded-xl p-panel-padding h-[260px] flex flex-col overflow-hidden">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="font-bold text-xs text-on-surface tracking-widest uppercase">Source Triage</h3>
+                    <span class="font-mono-data text-[8px] text-on-surface-variant tracking-widest">Live Citations</span>
+                </div>
+                <div id="sources-grid" class="grid grid-cols-1 gap-2 mt-6 overflow-y-auto pr-2"></div>
+            </div>
+            <div class="col-span-2 aero-glass rounded-xl p-panel-padding mb-20"><h3 class="font-bold text-xs tracking-widest text-on-surface uppercase mb-6">AI Autopsy</h3><div id="explanation-content" class="text-xs text-on-surface-variant leading-relaxed font-mono-data"></div></div>
+        </main>
+    </div>
+
+    <footer class="mt-auto pt-6 flex justify-between items-center bg-background/80 backdrop-blur-md pb-4 reveal-up stagger-3">
+        <div class="flex gap-6 font-mono-data text-[8px] text-on-surface-variant uppercase tracking-widest">
+            <a class="hover:text-primary transition-colors" href="/privacy">Privacy Policy</a>
+            <a class="hover:text-primary transition-colors" href="/terms">Terms of Service</a>
+            <a class="hover:text-primary transition-colors" href="/api-docs">API Registry</a>
+            <a class="hover:text-primary transition-colors" href="https://github.com/Tupu4545/Veracity" target="_blank">GitHub</a>
+        </div>
+        <div class="font-mono-data text-[9px] text-on-surface-variant tracking-wider uppercase pr-4">~Arnish & Priyanshu | 2026</div>
+    </footer>
+</div>
+
+<script>
+    let currentProvider = 'groq';
+
+    document.addEventListener('DOMContentLoaded', () => {
+        if (!localStorage.getItem('VERACITY_PROVIDER')) showSettings();
+        else loadHistory();
+    });
+
+    function showSettings() {
+        document.getElementById('settings-overlay').classList.remove('hidden');
+        setProvider(localStorage.getItem('VERACITY_PROVIDER') || 'groq');
+        document.getElementById('api-key-input').value = localStorage.getItem('VERACITY_KEY') || '';
+        document.getElementById('news-key-input').value = localStorage.getItem('VERACITY_NEWS_KEY') || '';
+        document.getElementById('base-url-input').value = localStorage.getItem('VERACITY_BASE_URL') || '';
+    }
+
+    function setDemoMode() {
+        localStorage.setItem('VERACITY_PROVIDER', 'demo');
+        localStorage.setItem('VERACITY_KEY', 'demo');
+        localStorage.setItem('VERACITY_NEWS_KEY', 'demo');
+        document.getElementById('settings-overlay').classList.add('hidden');
+    }
+
+
+    function setProvider(p) {
+        currentProvider = p;
+        const btns = ['groq', 'gemini', 'custom'];
+        btns.forEach(b => {
+            const el = document.getElementById(`btn-${b}`);
+            el.className = b === p ? "py-2 border border-primary/30 rounded-lg text-[10px] font-mono-data uppercase tracking-wider bg-primary/20 text-primary transition-all" : "py-2 border border-white/10 rounded-lg text-[10px] font-mono-data uppercase tracking-wider hover:bg-white/5 transition-all";
+        });
+        document.getElementById('key-label').textContent = p.charAt(0).toUpperCase() + p.slice(1) + " API Key";
+        document.getElementById('base-url-container').classList.toggle('hidden', p !== 'custom');
+    }
+
+    function saveSettings() {
+        const key = document.getElementById('api-key-input').value.trim();
+        const news = document.getElementById('news-key-input').value.trim();
+        const base = document.getElementById('base-url-input').value.trim();
+        if (key && news) {
+            localStorage.setItem('VERACITY_PROVIDER', currentProvider);
+            localStorage.setItem('VERACITY_KEY', key);
+            localStorage.setItem('VERACITY_NEWS_KEY', news);
+            if (currentProvider === 'custom') localStorage.setItem('VERACITY_BASE_URL', base);
+            document.getElementById('settings-overlay').classList.add('hidden');
+        }
+    }
+
+    function handleKeyPress(e) { if (e.key === 'Enter') analyze(); }
+
+    async function analyze() {
+        const claim = document.getElementById('claim-input').value;
+        if (!claim) return;
+        document.getElementById('welcome-state').classList.add('hidden');
+        document.getElementById('loading-overlay').classList.add('active');
+
+        const payload = {
+            claim,
+            provider: localStorage.getItem('VERACITY_PROVIDER'),
+            api_key: localStorage.getItem('VERACITY_KEY'),
+            news_api_key: localStorage.getItem('VERACITY_NEWS_KEY'),
+            base_url: localStorage.getItem('VERACITY_BASE_URL')
+        };
+
+        try {
+            const res = await fetch('/analyze', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(payload) });
+            const data = await res.json();
+            if (data.error) throw new Error(data.error);
+            document.getElementById('results-container').classList.remove('hidden');
+            renderResults(data, claim);
+            saveToHistory(claim, data.is_true);
+        } catch (err) { alert(err.message); }
+        finally { document.getElementById('loading-overlay').classList.remove('active'); }
+    }
+
+    function renderResults(data, query) {
+        document.getElementById('display-query-id').textContent = `ID: ${query.toUpperCase().substring(0, 15)}`;
+        const vText = data.is_true === "True" ? "Verified" : (data.is_true === "False" ? "Falsehood" : "Misleading");
+        document.getElementById('verdict-text').textContent = vText;
+        document.getElementById('confidence-score').textContent = `${data.confidence_score}%`;
+        const offset = 264 - (264 * data.confidence_score / 100);
+        document.getElementById('confidence-circle').style.strokeDashoffset = offset;
+        document.getElementById('bias-text').textContent = data.political_bias.toUpperCase();
+        document.getElementById('explanation-content').textContent = data.explanation;
+        const grid = document.getElementById('sources-grid');
+        grid.innerHTML = '';
+        data.real_sources.forEach(src => {
+            grid.innerHTML += `<a href="${src.url}" target="_blank" class="bg-white/5 border border-white/5 rounded p-2 flex justify-between items-center text-[10px] hover:bg-white/10 transition-all font-mono-data text-on-surface truncate">${src.source_name}</a>`;
+        });
+        const s = data.chart_data;
+        const total = s.supporting_count + s.refuting_count + s.neutral_count || 1;
+        document.getElementById('sentiment-bars').innerHTML = renderBar("Supporting", s.supporting_count, total, "bg-secondary") + renderBar("Refuting", s.refuting_count, total, "bg-error") + renderBar("Neutral", s.neutral_count, total, "bg-on-surface-variant");
+    }
+
+    function renderBar(l, c, t, col) {
+        return `<div class="space-y-1"><div class="flex justify-between font-mono-data text-[8px] uppercase"><span>${l}</span><span>${c}</span></div><div class="h-0.5 bg-white/5 rounded-full overflow-hidden"><div class="${col} h-full" style="width: ${(c/t*100)}%"></div></div></div>`;
+    }
+
+    function saveToHistory(q, v) {
+        let h = JSON.parse(localStorage.getItem('veracity_history') || '[]');
+        h.unshift({ q, v, d: new Date().toLocaleDateString() });
+        localStorage.setItem('veracity_history', JSON.stringify(h.slice(0, 20)));
+        loadHistory();
+    }
+
+    function loadHistory() {
+        const l = document.getElementById('history-list');
+        const h = JSON.parse(localStorage.getItem('veracity_history') || '[]');
+        l.innerHTML = h.length ? '' : '<p class="text-[9px] font-mono-data uppercase text-center mt-10 opacity-30">NO DATA</p>';
+        h.forEach(i => {
+            l.innerHTML += `<div class="p-3 rounded-lg bg-white/5 border border-white/5 hover:border-white/10 transition-all cursor-pointer"><span class="font-mono-data text-[8px] uppercase opacity-50">${i.v}</span><p class="text-[10px] truncate">${i.q}</p></div>`;
+        });
+    }
+    function clearHistory() { localStorage.removeItem('veracity_history'); loadHistory(); }
+</script>
+</body>
+</html>

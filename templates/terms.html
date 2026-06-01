@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Terms of Service | Veracity</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&family=Geist:wght@100..900&display=swap" rel="stylesheet"/>
+<style>
+    body { background-color: #020617; color: #dce1fb; font-family: 'Geist', sans-serif; -webkit-font-smoothing: antialiased; }
+    .glass-panel { background: rgba(25, 31, 49, 0.4); backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px); border: 1px solid rgba(255, 255, 255, 0.1); }
+    .font-mono-data { font-family: 'Geist Mono', monospace; }
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: #020617; }
+    ::-webkit-scrollbar-thumb { background: rgba(210, 187, 255, 0.2); border-radius: 10px; }
+</style>
+<script id="tailwind-config">
+    tailwind.config = {
+        darkMode: "class",
+        theme: {
+            extend: {
+                colors: {
+                    "surface-container": "#0c1324",
+                    "background": "#020617",
+                    "tertiary": "#ffb3ad",
+                    "surface-variant": "#0f172a",
+                    "on-surface": "#f1f5f9",
+                    "on-surface-variant": "#94a3b8",
+                    "primary": "#d2bbff",
+                    "primary-container": "#7c3aed",
+                    "secondary": "#4edea3",
+                    "secondary-container": "#00a572",
+                    "error": "#ef4444",
+                    "outline-variant": "rgba(255,255,255,0.1)"
+                }
+            }
+        }
+    }
+</script>
+</head>
+<body class="min-h-screen p-8 md:p-12 selection:bg-primary-container selection:text-white">
+
+<header class="max-w-6xl mx-auto mb-16">
+    <a href="/" class="flex items-center gap-4 mb-4 hover:opacity-80 transition-opacity">
+        <span class="material-symbols-outlined text-primary text-4xl">gavel</span>
+        <h1 class="font-bold text-4xl text-on-surface tracking-tighter">Veracity</h1>
+    </a>
+    <p class="font-mono-data text-xs text-primary uppercase tracking-[0.2em]">Terms of Service & Usage Protocols</p>
+</header>
+
+<main class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-8">
+    <aside class="md:col-span-3 hidden md:block space-y-4">
+        <div class="glass-panel rounded-xl p-6 sticky top-12">
+            <h2 class="font-mono-data text-[10px] text-primary mb-4 tracking-widest uppercase">Document Info</h2>
+            <ul class="space-y-4 font-mono-data text-[10px] text-on-surface-variant uppercase tracking-widest">
+                <li class="flex justify-between border-b border-white/5 pb-2"><span>Version</span><span class="text-on-surface">3.0.0 STABLE</span></li>
+                <li class="flex justify-between border-b border-white/5 pb-2"><span>Last Updated</span><span class="text-on-surface">MAY 2026</span></li>
+                <li class="flex justify-between border-b border-white/5 pb-2"><span>Status</span><span class="text-secondary">ENFORCED</span></li>
+            </ul>
+        </div>
+    </aside>
+
+    <section class="md:col-span-9 space-y-8">
+        <div class="glass-panel rounded-xl p-8" id="acceptance">
+            <div class="flex items-center gap-4 mb-6">
+                <span class="font-mono-data text-primary bg-primary/10 px-3 py-1 rounded border border-primary/20">01</span>
+                <h3 class="font-bold text-2xl text-on-surface tracking-tight">Acceptance of Terms</h3>
+            </div>
+            <div class="text-on-surface-variant space-y-4 text-sm leading-relaxed">
+                <p>
+                    By interacting with the Veracity Truth Engine, you acknowledge and accept these operational protocols. Veracity serves as an analytical instrument. We do not generate the news; we aggregate, process, and evaluate it using third-party Language Processing Units (LPUs) and Large Language Models (LLMs).
+                </p>
+                <p class="p-4 bg-surface-container rounded-lg border-l-2 border-primary italic">
+                    "Veracity provides the lens; the truth is determined by the underlying data."
+                </p>
+                <p>
+                    Because this project relies on live API endpoints, its uptime and accuracy are inherently tied to the stability of those upstream services (e.g., Groq, Google, NewsAPI). We are not liable for hallucinations or downtime originating from those providers.
+                </p>
+            </div>
+        </div>
+
+        <div class="glass-panel rounded-xl p-8" id="conduct">
+            <div class="flex items-center gap-4 mb-6">
+                <span class="font-mono-data text-primary bg-primary/10 px-3 py-1 rounded border border-primary/20">02</span>
+                <h3 class="font-bold text-2xl text-on-surface tracking-tight">User Conduct & Rate Limits</h3>
+            </div>
+            <div class="text-on-surface-variant space-y-4 text-sm leading-relaxed">
+                <p>
+                    You are responsible for providing your own API keys for analysis. Consequently, you are bound by the Terms of Service and rate limits of those respective providers (Groq, Google Gemini, or Custom OpenRouter endpoints). 
+                </p>
+                <ul class="list-none space-y-3 mt-4">
+                    <li class="flex items-start gap-3">
+                        <span class="material-symbols-outlined text-secondary text-lg">check_circle</span>
+                        <span>Use the system for genuine fact-checking and research.</span>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <span class="material-symbols-outlined text-error text-lg">cancel</span>
+                        <span>Do not attempt to execute injection attacks against the prompt engineering pipeline.</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer class="max-w-6xl mx-auto mt-24 pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-4">
+    <div class="font-mono-data text-[10px] text-on-surface-variant flex gap-6 tracking-widest uppercase">
+        <a class="hover:text-primary transition-colors" href="/privacy">Privacy Policy</a>
+        <a class="hover:text-primary transition-colors" href="/api-docs">API Documentation</a>
+        <a class="hover:text-primary transition-colors" href="https://github.com/Tupu4545/Veracity" target="_blank">GitHub</a>
+    </div>
+    <div class="text-[10px] font-mono-data text-on-surface-variant opacity-40 uppercase tracking-widest">
+        Last Updated: May 2026 | Version 3.0
+    </div>
+</footer>
+
+<div class="fixed bottom-4 right-4 text-[9px] font-mono-data text-on-surface-variant/50 pointer-events-none select-none z-50 tracking-widest uppercase">
+    Engineered for Truth | Made by ~Arnish & Priyanshu
+</div>
+
+</body>
+</html>
