@@ -110,15 +110,15 @@
         <div class="glass-panel rounded-xl p-8">
             <div class="flex items-center gap-4 mb-6">
                 <span class="font-mono-data text-on-surface bg-white/10 px-3 py-1 rounded border border-white/20">04</span>
-                <h3 class="font-bold text-2xl text-on-surface tracking-tight">Custom API (Privacy-First)</h3>
+                <h3 class="font-bold text-2xl text-on-surface tracking-tight">Custom API & Ollama Guide</h3>
             </div>
             <div class="text-on-surface-variant space-y-4 text-sm leading-relaxed">
-                <p>For users who want maximum privacy or wish to use open-source local models, Veracity supports any OpenAI-compatible API endpoint.</p>
+                <p>For maximum privacy, Veracity supports any OpenAI-compatible API endpoint (OpenRouter, LM Studio, Ollama).</p>
                 <ol class="list-decimal list-inside space-y-2 mt-4 ml-4 font-mono-data text-xs">
-                    <li>Run a local model using <strong>LM Studio</strong> or <strong>Ollama</strong>, or use a provider like <strong>OpenRouter</strong>.</li>
-                    <li>Select "Custom API" in the Veracity settings.</li>
-                    <li>Enter the Base URL (e.g., <code>http://localhost:1234/v1</code> or <code>https://openrouter.ai/api/v1</code>).</li>
-                    <li>Enter the required API key for your custom endpoint (or any text if your local model doesn't require auth).</li>
+                    <li><strong>OpenRouter / Cloud APIs:</strong> Just paste your endpoint (e.g., <code>https://openrouter.ai/api/v1</code>) and your key.</li>
+                    <li><strong>Ollama (Localhost):</strong> If Veracity is deployed on the cloud (Vercel), it cannot reach your local machine's <code>localhost:11434</code>.</li>
+                    <li><strong>The Ollama Fix:</strong> You must expose your Ollama port using a tunnel. Run <code>ngrok http 11434</code> in your terminal.</li>
+                    <li>Copy the Ngrok Forwarding URL (e.g., <code>https://xyz.ngrok.app/v1</code>) and paste it as the Base URL in Veracity.</li>
                 </ol>
             </div>
         </div>
